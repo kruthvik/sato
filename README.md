@@ -20,4 +20,6 @@ I plan to add a real fork of the agent that can be used globally, so injection w
 ## Credits
 The idea and inspiration for the overall system comes from https://www.youtube.com/watch?v=kzcI5F4tGiU&list=WL&index=10 and his other videos. While this program greatly expands on his work, it also takes great influence from his content. 
 
+Of course, this project relies heavily on the pi project and is directly built on it and other extensions by related authors, so credits to them as well. 
+
 The research notes should also still be present in the program with apt citations. If any other issues with credit are present, please let me know and I will address them.
