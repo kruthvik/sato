@@ -1,11 +1,17 @@
-# sato
-learning engine built as a fork of pi-agent utilizing mainstream learning research 
+# Sato
 
-current version uses extension and skill injection into existing pi-agent downloads to separate global and local instances. backup pi-agent and current setup in case of failure and verify integration. 
-it also has various integrations and addons and more are likely to come in the future.
+Sato is a learning engine built as a fork of [pi-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), utilizing mainstream learning research.
 
-keep in mind, this is MY implementation that I use. the current setup i have may not work best for all people so exercising personal judgement and discretion is recommended. however, the brain.md file is flexible so users can input their own learning patterns. the core learning engine is also largely objective. some research from what i used to create it is still present.
+> **Note:** This is my personal implementation. The current setup may not work best for everyone, so use your own judgment and discretion when adapting it.
 
-a large portion of this app also features ai-generated and ai-assisted code. while the core system design and setup was personally crated, the internal structure and extensions/skills largely aren't. i have made sure to verify a lot of the program and it should be sandboxed, but caution is advised. 
+## Current Implementation
 
-i will soon add a real and actual fork of the agent that can be used globally so that injection isn't required. i am currently in the step of vetting this fork and making sure that all of the features have transferred over. 
+The current version uses extension and skill injection into existing pi-agent downloads to separate global and local instances. Back up pi-agent and the current setup in case of failure, and verify the integration before relying on it.
+
+Sato also includes various integrations and add-ons, with more likely to come in the future.
+
+## Development Notes
+
+A large portion of this application features AI-generated and AI-assisted code. While the core system design and setup were personally created, much of the internal structure and the extensions and skills were not.
+
+I plan to add a real fork of the agent that can be used globally, so injection will no longer be required. I am currently vetting this fork and verifying that all features work correctly.
