@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "integrations": [
+    {
+      "id": "desmos",
+      "name": "Desmos Graphing Calculator",
+      "category": "Mathematics",
+      "enabled": false,
+      "scriptUrl": "",
+      "description": "Interactive 2D and 3D graphing, function manipulation, curve analysis, parameter sliders, and geometry constructions. Add your own Desmos API key in the Settings and Integration Hub before enabling.",
+      "settings": {
+        "apiKey": "",
+        "keypad": true,
+        "graphpaper": true,
+        "expressions": true
+      }
+    },
+    {
+      "id": "accounting-sheet",
+      "name": "Accounting Journal and Ledger Sheets",
+      "category": "Accounting and Finance",
+      "enabled": false,
+      "description": "Interactive spreadsheets for general journal entries, T-accounts, trial balances, and financial statements with live debit and credit balancing, formula auto-sum, and cell-by-cell verification.",
+      "settings": {
+        "autoSum": true,
+        "enforceBalance": true,
+        "highlightDiscrepancies": true
+      }
+    },
+    {
+      "id": "geogebra",
+      "name": "GeoGebra Dynamic Math",
+      "category": "Mathematics and Physics",
+      "enabled": false,
+      "scriptUrl": "https://www.geogebra.org/apps/deployggb.js",
+      "description": "Dynamic geometry, 3D coordinate graphing, vector fields, and algebraic constructions.",
+      "settings": {
+        "showToolbar": true,
+        "showAlgebraInput": true
+      }
+    },
+    {
+      "id": "3dmol",
+      "name": "3Dmol.js Molecular Visualizer",
+      "category": "Chemistry and Biology",
+      "enabled": false,
+      "scriptUrl": "https://3Dmol.csb.pitt.edu/build/3Dmol-min.js",
+      "description": "Interactive 3D molecular structures, PDB and SDF macromolecule viewing, rotating proteins, and chemical bond representations.",
+      "settings": {
+        "backgroundColor": "#111111"
+      }
+    },
+    {
+      "id": "code-sandbox",
+      "name": "In-Browser Code Sandbox",
+      "category": "Computer Science",
+      "enabled": false,
+      "description": "In-browser code editor with syntax highlighting, unit-test execution, and output verification for JavaScript and Python.",
+      "settings": {
+        "theme": "vs-dark",
+        "defaultLanguage": "javascript"
+      }
+    }
+  ]
+}

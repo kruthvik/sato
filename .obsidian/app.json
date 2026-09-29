@@ -1,0 +1,9 @@
+{
+  "attachmentFolderPath": "content/assets",
+  "newFileLocation": "root",
+  "showFrontmatter": true,
+  "livePreview": true,
+  "readableLineLength": true,
+  "strictLineBreaks": false,
+  "showLineNumber": false
+}

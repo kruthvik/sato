@@ -1,0 +1,28 @@
+# OS junk
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Runtime state
+.memory/
+*.log
+
+# Learning data (user-specific, not shared)
+# Keep .gitkeep and dashboard.md; ignore runtime JSON/MD state
+_learning/mastery/*.json
+_learning/reviews/cards.json
+_learning/reviews/due-today.md
+_learning/graphs/*.json
+sessions/*.md
+sessions/anki_export.tsv
+topics/*.md

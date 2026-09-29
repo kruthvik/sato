@@ -1,0 +1,150 @@
+{
+  "version": "3.0.0",
+  "eventSchemaVersion": 1,
+  "learnerStateVersion": 2,
+  "policyId": "active-understanding-v3",
+  "successScore": 0.7,
+  "modes": {
+    "teach": {
+      "readinessLabel": "provisional mastery",
+      "phases": [
+        { "id": "retrieve", "label": "Retrieve prior knowledge", "share": 0.12 },
+        { "id": "map", "label": "Map the shortest sound learning path", "share": 0.13 },
+        { "id": "build", "label": "Build models and produce independently", "share": 0.5 },
+        { "id": "transfer", "label": "Discriminate and transfer", "share": 0.2 },
+        { "id": "schedule", "label": "Schedule delayed verification", "share": 0.05 }
+      ]
+    },
+    "fast-learn": {
+      "readinessLabel": "provisional conceptual coverage",
+      "phases": [
+        { "id": "diagnose", "label": "Scope and cold diagnostic", "share": 0.1 },
+        { "id": "model", "label": "Build the minimum causal model", "share": 0.35 },
+        { "id": "reconstruct", "label": "Retrieve and explain", "share": 0.3 },
+        { "id": "apply", "label": "Apply, vary, and repair", "share": 0.2 },
+        { "id": "schedule", "label": "Schedule delayed retrieval", "share": 0.05 }
+      ]
+    },
+    "cram": {
+      "readinessLabel": "verified deadline performance",
+      "phases": [
+        { "id": "triage", "label": "Define performance and triage", "share": 0.1 },
+        { "id": "acquire", "label": "Acquire the minimum viable model", "share": 0.28 },
+        { "id": "retrieve", "label": "Cold retrieval and representative practice", "share": 0.24 },
+        { "id": "repair", "label": "Classify and repair bottlenecks", "share": 0.16 },
+        { "id": "simulate", "label": "Timed independent simulation", "share": 0.17 },
+        { "id": "handoff", "label": "Final retrieval and performance buffer", "share": 0.05 }
+      ]
+    },
+    "project": {
+      "readinessLabel": "independent milestone readiness",
+      "phases": [
+        { "id": "commit", "label": "Define artifact and commit an independent plan", "share": 0.15 },
+        { "id": "build", "label": "Build in milestone blocks", "share": 0.5 },
+        { "id": "critique", "label": "Obtain rubric or external critique", "share": 0.15 },
+        { "id": "revise", "label": "Revise and explain tradeoffs", "share": 0.15 },
+        { "id": "recreate", "label": "Schedule delayed recreation", "share": 0.05 }
+      ]
+    },
+    "exam-drill": {
+      "readinessLabel": "criterion target reached",
+      "phases": [
+        { "id": "ingest", "label": "Ingest exam bank and establish target criteria", "share": 0.1 },
+        { "id": "drill-round", "label": "Administer unassisted variant round", "share": 0.5 },
+        { "id": "triage-repair", "label": "Classify misses and execute targeted micro-repair", "share": 0.25 },
+        { "id": "verify-handoff", "label": "Verify criterion stability and export flashcards", "share": 0.15 }
+      ]
+    }
+  },
+  "mastery": {
+    "minimumDelayedEvidenceMs": 600000,
+    "minimumDurableEvidenceMs": 86400000,
+    "independentAssistanceStates": ["none"],
+    "noSingleScoreCanProveMastery": true,
+    "highStakesRequiresSimulation": true
+  },
+  "feedback": {
+    "minimumPauseAfterSubstantiveAttempt": true,
+    "sequence": ["acknowledgeCorrectReasoning", "locateFirstBreak", "explainGoverningPrinciple", "contrastNearestTrap", "showWorkedRepair", "requireChangedCase", "confirmLearnerReady"],
+    "doNotStackQuestionsDuringUnrepairedGap": true,
+    "correctButUnexplainedRequiresFollowUp": true
+  },
+  "pacing": {
+    "defaultUnit": "one_concept_loop",
+    "autoAdvance": false,
+    "requireLearnerConsentBetweenChunks": true,
+    "requireSourceCheckBeforeScope": true,
+    "requirePreferenceCheckAtOpening": true
+  },
+  "activeRecallPolicy": {
+    "corePrinciple": "Active generation must dominate passive reception (Roediger & Karpicke 2006). Never lecture continuously without immediate active retrieval.",
+    "minRetrievalDensity": "Every bite-sized explanation (1-2 core concepts) must be immediately followed by an active retrieval probe.",
+    "requireGenerativePredictionBeforeReveal": true,
+    "requireImmediateCuedRecallAfterPrinciple": true,
+    "requireCumulativeInterleavedRetrieval": true,
+    "supportedFormats": [
+      "shortAnswerCuedRecall",
+      "freeRecallBlurting",
+      "selfExplanationAndReasoning",
+      "predictiveHypothesisGeneration",
+      "feynmanTeachBack",
+      "contrastiveRetrieval",
+      "typedVocabularyRecall"
+    ],
+    "forbidden": [
+      "passiveContinuousLecturingWithoutRetrieval",
+      "checkingUnderstandingWithPassiveConsentOnly",
+      "askingLearnerToRereadInsteadOfRecall",
+      "advancingWithoutActiveProduction"
+    ]
+  },
+  "assessmentSampling": {
+    "minimumSubstantiveChecksPerChunk": 1,
+    "recommendedRangePerChunk": [1, 4],
+    "requiredDimensions": ["retrieval", "explanationOrPrediction", "discrimination", "applicationOrNearTransfer"],
+    "highStakesAdds": ["boundaryCase", "farTransfer", "independentSimulation"],
+    "oneQuestionCannotEstablishMastery": true,
+    "stopOnlyAfterCoverageOrLearnerStop": true
+  },
+  "vocabularyPolicy": {
+    "identifyFrom": ["suppliedSources", "courseObjectives", "examRubric", "currentChunk"],
+    "includeWhenRelevant": true,
+    "excludeWhenIncidental": true,
+    "encodingRequires": ["termOrSymbol", "plainLanguageMeaning", "courseContext", "exampleOrContrast", "activeRecall"],
+    "memoryTool": "open_memorize_web",
+    "verification": ["typedRecall", "useInExplanationOrApplication", "delayedRetrieval"],
+    "neverUseAs": "substituteForConceptualUnderstanding"
+  },
+  "mcqPolicy": {
+    "role": "targeted_diagnosis_or_discrimination",
+    "defaultShareOfChecks": 0.2,
+    "maximumShareOfChecks": 0.33,
+    "allowedOnlyWhen": ["specificMisconceptionNeedsIsolation", "nearestConfusableMustBeDistinguished", "sourceOrExamFormatRequiresSelection"],
+    "distractorsMust": ["bePlausible", "mapToKnownMisconceptions", "beContextMatched", "requireReasoningToReject"],
+    "forbidden": ["trivialRecallFreebies", "obviousElimination", "recognitionAsSoleMasteryEvidence", "backToBackMcqWithoutFeedback"],
+    "alwaysPairWith": "openExplanationOrChangedCase"
+  },
+  "gapEscrow": {
+    "minimumInterveningEvents": 1,
+    "minimumVerificationDelayMs": 300000,
+    "verificationNovelty": ["isomorphic", "near-transfer", "far-transfer", "authentic"]
+  },
+  "hintLadder": [
+    "none",
+    "cue",
+    "partial-scaffold",
+    "worked-step",
+    "full-demonstration",
+    "author-solution"
+  ],
+  "scheduler": {
+    "version": "fsrs-4.5",
+    "requestRetention": 0.9,
+    "explorationRate": 0.15,
+    "reviewDebtWarningMinutes": 30
+  },
+  "safetyCritical": {
+    "requireHumanVerification": true,
+    "allowAiOnlyDurableMastery": false
+  }
+}

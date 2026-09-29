@@ -1,0 +1,57 @@
+# Workspace-local Pi profile contains credentials and installed providers.
+.learn-runtime/
+node_modules/
+scratch/
+/sources/
+/outputs/
+/papers/
+
+# Nested git metadata must never be committed (breaks staging as a gitlink).
+**/.git/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+*.tmp
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/.trash/
+
+# Local environment and secrets
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Learner-generated runtime state (regenerable)
+/_learning/current-session.json
+/_learning/activities/
+/_learning/garage/
+/_learning/events/
+/_learning/contexts/
+/_learning/assessments/
+/_learning/errors/
+/_learning/predictions/
+/_learning/blurts/
+/_learning/palaces/
+/_learning/web/
+/_learning/security/
+_learning/mastery/*.json
+_learning/reviews/cards.json
+_learning/reviews/due-today.md
+_learning/graphs/*.json
+*.log
+
+# Learner-authored/generated library content; keep only the empty directory markers.
+/content/sessions/*
+/content/topics/*
+/content/activities/*
+/content/assets/*
+/content/exports/*
+!/content/sessions/.gitkeep
+!/content/topics/.gitkeep
+!/content/activities/.gitkeep
+!/content/assets/.gitkeep
+!/content/exports/.gitkeep

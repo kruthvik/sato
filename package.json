@@ -1,0 +1,33 @@
+{
+  "name": "learn",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "bun@1.4.2",
+  "type": "module",
+  "scripts": {
+    "setup": "bun ./scripts/sync-skills.js && bun ./scripts/check-workspace.js",
+    "sync:skills": "bun ./scripts/sync-skills.js",
+    "lint": "bun ./scripts/check-workspace.js --lint",
+    "test": "bun ./scripts/check-workspace.js --test && bun ./scripts/test-learning-engine.ts && bun ./scripts/test-youtube-transcript.ts && bun ./scripts/test-activity-rich.ts && bun ./scripts/test-activity-server.ts",
+    "test:engine": "bun ./scripts/test-learning-engine.ts",
+    "test:youtube": "bun ./scripts/test-youtube-transcript.ts",
+    "test:youtube:live": "bun ./scripts/test-youtube-transcript.ts --live",
+    "test:rich": "bun ./scripts/test-activity-rich.ts",
+    "test:activity-server": "bun ./scripts/test-activity-server.ts",
+    "check": "bun ./scripts/check-workspace.js",
+    "settings": "bun ./scripts/settings-server.ts",
+    "start": "bun ./scripts/settings-server.ts"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.52",
+    "katex": "^0.18.7",
+    "marked": "^18.0.14",
+    "mermaid": "^11.12.0",
+    "puppeteer": "^25.12.0",
+    "sanitize-html": "^2.17.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/sanitize-html": "^2.16.1"
+  }
+}

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="en" data-preset="study" data-density="comfortable" data-radius="soft" data-layout="single">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="A private interactive learning activity">
+  <title>Learning Activity</title>
+  <link rel="stylesheet" href="/activity-assets/katex.min.css">
+  <style>
+    :root {
+      --canvas:#080808; --surface:#111111; --elevated:#181818;
+      --border:rgba(255,255,255,.12); --border-strong:rgba(255,255,255,.28);
+      --text:#fff; --text-2:#999; --text-3:#666; --accent:#fff;
+      --correct:#22c55e; --incorrect:#ef4444;
+      --radius:4px; --pad:32px; --gap:16px;
+      --font-display:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+    }
+    html[data-preset="editorial"] {
+      --canvas:#f6f6f7; --surface:#fff; --elevated:#ececed;
+      --border:rgba(0,0,0,.10); --border-strong:rgba(0,0,0,.25);
+      --text:#111; --text-2:#555; --text-3:#8a8a8a; --accent:#111;
+      --correct:#16803d; --incorrect:#dc2626; color-scheme:light;
+    }
+    html[data-preset="midnight"] {
+      --canvas:#000000; --surface:#0a0a0a; --elevated:#141414;
+      --border:rgba(255,255,255,.09); --border-strong:rgba(255,255,255,.24);
+      --text:#f4f4f5; --text-2:#a1a1aa; --text-3:#71717a; --accent:#e4e4e7;
+      --correct:#22c55e; --incorrect:#ef4444; color-scheme:dark;
+    }
+    html[data-preset="technical"] {
+      --canvas:#090d16; --surface:#0f172a; --elevated:#1e293b;
+      --border:rgba(148,163,184,.16); --border-strong:rgba(148,163,184,.34);
+      --text:#f8fafc; --text-2:#94a3b8; --text-3:#64748b; --accent:#38bdf8;
+      --correct:#34d399; --incorrect:#f87171; color-scheme:dark;
+    }
+    html:not([data-preset="editorial"]){color-scheme:dark}
+    html[data-density="compact"]{--pad:22px;--gap:10px}
+    html[data-density="spacious"]{--pad:40px;--gap:24px}
+    html[data-radius="soft"]{--radius:4px}
+    html[data-radius="sharp"]{--radius:2px}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--canvas)}
+    body{margin:0;min-height:100dvh;background:var(--canvas);color:var(--text);font:400 16px/1.65 var(--font-body);-webkit-font-smoothing:antialiased}
+    button,input,textarea,select{font:inherit}
+    button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+    main{width:min(900px,100%);margin:0 auto;padding:48px 24px 80px}
+    header{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:32px;padding-bottom:32px;border-bottom:1px solid var(--border);margin-bottom:24px}
+    .eyebrow,.item-no,.points,.field-label,.progress-copy,footer{font-family:var(--font-mono);font-size:.69rem;letter-spacing:.09em;text-transform:uppercase}
+    .eyebrow{color:var(--text-2)}
+    h1{max-width:760px;margin:14px 0 12px;font:800 clamp(2.15rem,6vw,3.6rem)/1.04 var(--font-display);letter-spacing:-.045em;text-wrap:balance}
+    .objective{max-width:65ch;color:var(--text-2)}
+    .score-card{min-width:122px;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
+    .score-card strong{display:block;font:700 1.1rem/1.2 var(--font-mono)}
+    .score-card span{font:600 .62rem/1.3 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
+    .instructions{margin-bottom:26px;padding:18px 20px;border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);background:var(--surface);color:var(--text-2)}
+    .progress{position:sticky;top:0;z-index:2;margin-bottom:var(--gap);padding:14px 0;background:color-mix(in srgb,var(--canvas) 94%,transparent);backdrop-filter:blur(12px)}
+    .progress-copy{display:flex;justify-content:space-between;margin-bottom:8px;color:var(--text-2);font-variant-numeric:tabular-nums}
+    .progress-line{height:4px;overflow:hidden;border-radius:2px;background:var(--border)}
+    .progress-line i{display:block;width:0;height:100%;background:var(--accent);transition:width .25s cubic-bezier(.16,1,.3,1)}
+    .items-grid{display:grid;grid-template-columns:1fr;gap:var(--gap)}
+    html[data-layout="split"] .items-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .item{min-width:0;padding:var(--pad);border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);box-shadow:0 4px 20px rgba(0,0,0,.12)}
+    .item[data-width="full"],.content-block{grid-column:1/-1}
+    .item[data-tone="accent"]{border-left:3px solid var(--accent)}
+    .item[data-tone="quiet"]{background:var(--canvas);box-shadow:none}
+    .content-block{padding:28px 0 12px;border:0;border-top:1px solid var(--border);border-radius:0;background:transparent;box-shadow:none}
+    .content-block[data-tone="accent"]{padding:var(--pad);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:var(--radius);background:var(--surface)}
+    .item-top{display:flex;justify-content:space-between;gap:16px;margin-bottom:16px}
+    .item-no{color:var(--text-2)}
+    .points{color:var(--text);font-variant-numeric:tabular-nums}
+    .prompt{margin-bottom:20px;font:700 1.32rem/1.35 var(--font-display);letter-spacing:-.02em}
+    .prompt>p{margin:.3em 0}
+    .math{margin:-2px 0 20px;padding:18px;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas);font-size:1.12rem}
+    .rich>*:first-child{margin-top:0}.rich>*:last-child{margin-bottom:0}
+    .rich p{margin:.7em 0;overflow-wrap:anywhere}
+    .rich h2,.rich h3,.rich h4{margin:1.4em 0 .5em;font-family:var(--font-display);line-height:1.18;letter-spacing:-.025em;text-wrap:balance}
+    .rich h2{font-size:1.6rem}.rich h3{font-size:1.25rem}.rich h4{font-size:1rem}
+    .rich ul,.rich ol{margin:.8em 0;padding-left:1.45em}.rich li+li{margin-top:.32em}
+    .rich hr{height:1px;margin:24px 0;border:0;background:var(--border)}
+    .rich blockquote{margin:1em 0;padding:2px 0 2px 16px;border-left:3px solid var(--border-strong);color:var(--text-2)}
+    .rich a{color:var(--text);text-decoration-color:var(--text-3);text-underline-offset:3px}.rich a:hover{text-decoration-color:var(--text)}
+    .rich code{padding:.16em .38em;border-radius:2px;background:var(--elevated);font:.88em/1.4 var(--font-mono)}
+    .rich pre{margin:16px 0;padding:18px;overflow:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas)}
+    .rich pre code{padding:0;background:transparent;color:var(--text)}
+    .rich img{display:block;max-width:100%;height:auto;margin:18px 0;border:1px solid var(--border);border-radius:var(--radius)}
+    .table-wrap{width:100%;margin:18px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas)}
+    .rich table{width:100%;border-collapse:collapse;font-size:.92rem;line-height:1.55}
+    .rich th,.rich td{padding:12px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border);border-right:1px solid color-mix(in srgb,var(--border) 60%,transparent)}
+    .rich th:last-child,.rich td:last-child{border-right:0}
+    .rich th{background:var(--elevated);font:700 .72rem/1.4 var(--font-mono);letter-spacing:.07em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+    .rich td{color:var(--text)}
+    .rich td strong{color:var(--text);font-weight:600}
+    .rich tbody tr:nth-child(even){background:color-mix(in srgb,var(--elevated) 40%,transparent)}
+    .rich tbody tr:hover{background:color-mix(in srgb,var(--elevated) 70%,transparent)}
+    .rich tr:last-child td{border-bottom:0}
+    .rich th[align="center"],.rich td[align="center"],.rich .text-center{text-align:center}
+    .rich th[align="right"],.rich td[align="right"],.rich .text-right{text-align:right;font-variant-numeric:tabular-nums}
+    .rich th[align="left"],.rich td[align="left"],.rich .text-left{text-align:left}
+    .katex{font-size:1.05em;color:var(--text);line-height:1.2}
+    .katex-display{margin:1.2em 0;overflow-x:auto;overflow-y:hidden;padding:14px 18px;text-align:center;background:color-mix(in srgb,var(--elevated) 45%,transparent);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    .katex-display>.katex{font-size:1.15em;white-space:nowrap}.math .katex-display{margin:0;padding:0;border:0;background:transparent;box-shadow:none}.speaking-box{margin:12px 0;padding:16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas)}.speaking-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}.speak-mic-btn{background:var(--text);color:var(--canvas)}.speak-mic-btn.recording{background:var(--incorrect)!important;color:#fff!important;animation:speak-pulse 1.2s infinite}@keyframes speak-pulse{0%{opacity:1;transform:scale(1)}50%{opacity:.7;transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}.speak-transcript{min-height:48px;padding:12px 14px;border:1px dashed var(--border-strong);border-radius:var(--radius);background:var(--elevated);font-size:.95rem;color:var(--text);margin-bottom:12px;line-height:1.4}.speak-transcript:empty::before{content:attr(placeholder);color:var(--text-3)}.speak-fallback{margin-top:10px}.speak-fallback .field-label{font-size:.8rem;color:var(--text-2);margin-bottom:4px}.interactive-box{margin:12px 0;padding:16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas)}.sheet-wrap{margin:14px 0;overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas);padding:12px}.sheet-table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:.85rem}.sheet-table th{background:var(--elevated);color:var(--text-2);padding:8px 10px;text-align:left;border:1px solid var(--border);font-weight:600;font-size:.78rem;letter-spacing:.05em;text-transform:uppercase}.sheet-table td{border:1px solid var(--border);padding:4px 6px}.sheet-cell{width:100%;background:transparent;border:none;color:var(--text);font-family:var(--font-mono);font-size:.85rem;padding:4px 6px}.sheet-cell:focus{background:var(--elevated);outline:1px solid var(--accent);border-radius:2px}.sheet-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;flex-wrap:wrap}.sheet-balance-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.78rem;font-family:var(--font-mono)}.sheet-balance-badge.balanced{background:rgba(34,197,94,.15);color:var(--correct);border:1px solid rgba(34,197,94,.3)}.sheet-balance-badge.imbalanced{background:rgba(239,68,68,.15);color:var(--incorrect);border:1px solid rgba(239,68,68,.3)}.desmos-calc-wrap{margin:14px 0;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:#fff}
+    .katex-error{color:var(--incorrect)!important;font-family:var(--font-mono);font-size:.86em;padding:2px 6px;background:rgba(239,68,68,.12);border-radius:2px}
+    label.option{display:flex;align-items:flex-start;gap:12px;margin:8px 0;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas);cursor:pointer;transition:border-color .15s ease,background .15s ease}
+    label.option:hover{border-color:var(--border-strong);background:var(--elevated)}
+    label.option:has(input:checked){border-color:var(--text);background:var(--elevated)}
+    label.option .rich p{margin:0}
+    input[type=radio],input[type=checkbox]{flex:0 0 auto;margin-top:5px;accent-color:var(--accent)}
+    .field-label{display:block;margin-bottom:8px;color:var(--text-2)}
+    input[type=text],input[type=number],textarea,select{width:100%;padding:14px 16px;border:1px solid var(--border-strong);border-radius:var(--radius);outline:0;background:var(--canvas);color:var(--text)}
+    input:focus,textarea:focus,select:focus{border-color:var(--text)}
+    textarea{min-height:150px;resize:vertical}
+    .cloze-input{display:inline-block;width:160px!important;margin:3px 5px;padding:7px 9px!important}
+    .match-row{display:grid;grid-template-columns:minmax(130px,1fr) minmax(160px,1.2fr);align-items:center;gap:14px;margin:10px 0}
+    .match-left{font:600 1rem/1.45 var(--font-display)}.match-left p{margin:0}
+    .order-list{list-style:none;margin:0;padding:0}.order-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;margin:8px 0;padding:11px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--canvas)}
+    .order-index{font:700 .7rem var(--font-mono);color:var(--text-2)}.order-copy p{margin:0}.move{display:flex;gap:5px}.move button{width:34px;height:34px;padding:0}
+    button{padding:12px 20px;border:0;border-radius:var(--radius);background:var(--text);color:var(--canvas);font:700 .75rem/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:opacity .15s ease,transform .15s ease}
+    button:hover{opacity:.88}button:active{transform:scale(.98)}button:disabled{opacity:.3;cursor:not-allowed;transform:none}
+    button.secondary{border:1px solid var(--border);background:transparent;color:var(--text-2)}button.secondary:hover{border-color:var(--border-strong);color:var(--text);background:var(--elevated)}
+    .hint-wrap{margin-top:16px}
+    .hint{display:none;margin-top:12px;color:var(--text-2);font-size:.92rem}.hint.visible{display:block}
+    .feedback{margin-top:20px;padding:16px 18px;border-left:3px solid;border-radius:var(--radius)}.feedback.good{border-color:var(--correct);background:rgba(34,197,94,.08)}.feedback.bad{border-color:var(--incorrect);background:rgba(239,68,68,.08)}.feedback strong{display:block;margin-bottom:5px;font-family:var(--font-mono);font-size:.78rem}.feedback .rich{color:var(--text-2)}
+    .actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:28px}.actions .status{margin-left:auto;color:var(--text-2);font-size:.8rem}
+    .summary{display:none;margin:28px 0;padding:26px;border:1px solid var(--border);border-radius:var(--radius);background:var(--surface)}.summary.visible{display:block}.summary.pass{border-color:var(--correct);background:rgba(34,197,94,.08)}.summary h2{margin:0 0 8px;font:800 1.7rem/1.15 var(--font-display);letter-spacing:-.03em}.summary p{margin:5px 0;color:var(--text-2)}
+    footer{display:flex;justify-content:space-between;margin-top:46px;padding-top:17px;border-top:1px solid var(--border);color:var(--text-3);text-transform:none}
+    @media(max-width:760px){main{padding:28px 16px 64px}header{grid-template-columns:1fr;padding-bottom:24px}.score-card{display:none}html[data-layout="split"] .items-grid{grid-template-columns:1fr}.item{grid-column:1/-1!important;padding:22px}.match-row{grid-template-columns:1fr}.actions .status{width:100%;margin:6px 0}.prompt{font-size:1.16rem}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <div class="eyebrow" id="eyebrow"></div>
+      <h1 id="title"></h1>
+      <div class="objective rich" id="objective"></div>
+    </div>
+    <div class="score-card"><strong id="scoreTop">Not graded</strong><span>Current score</span></div>
+  </header>
+  <div class="instructions rich" id="instructions"></div>
+  <div class="progress">
+    <div class="progress-copy"><span id="progressLabel">Ready</span><span id="progressValue">0%</span></div>
+    <div class="progress-line"><i id="progressFill"></i></div>
+  </div>
+  <form id="activityForm">
+    <div class="items-grid" id="items"></div>
+    <div class="actions">
+      <button type="submit">Grade activity</button>
+      <button type="button" class="secondary" id="clearBtn">Clear responses</button>
+      <span class="status" id="saveStatus">Responses stay private on this computer.</span>
+    </div>
+  </form>
+  <section class="summary" id="summary" aria-live="polite"></section>
+  <footer><span>Activity Studio</span><span id="activityId"></span></footer>
+</main>
+<script>
+const activity=__LAS_ACTIVITY__;
+const apiBase=__LAS_API__;
+const activityStartedAt=new Date().toISOString();
+const state={orders:{},grades:{},hints:{},submitted:false};
+const $=(selector)=>document.querySelector(selector);
+const esc=(value)=>String(value??="").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+const norm=(value,caseSensitive=false)=>{const result=String(value??="").trim().replace(/\s+/g," ");return caseSensitive?result:result.toLocaleLowerCase()};
+const sameSet=(a,b)=>a.length===b.length&&a.every(value=>b.includes(value));
+const html=(compiled,fallback="")=>compiled||esc(fallback);
+// Only server-sanitized rich content and locally constructed, escaped controls reach this parser.
+function markupNodes(markup){return [...new DOMParser().parseFromString(markup,"text/html").body.childNodes]}
+function setMarkup(element,markup){
+  if(element.tagName==="TR"){
+    const doc=new DOMParser().parseFromString(`<table><tbody><tr>${markup}</tr></tbody></table>`,"text/html");
+    element.replaceChildren(...doc.querySelector("tr").childNodes);
+  }else element.replaceChildren(...markupNodes(markup));
+}
+function sheetColumns(wrap){try{const value=JSON.parse(wrap.dataset.cols||"[]");return Array.isArray(value)?value:[]}catch{return []}}
+function shuffled(values){const result=[...values];for(let i=result.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[result[i],result[j]]=[result[j],result[i]]}return result}
+function fieldName(item){return `q_${item.id}`}
+function applyAppearance(){
+  const appearance=activity.appearance||{};
+  document.documentElement.dataset.preset=appearance.preset||"study";
+  document.documentElement.dataset.density=appearance.density||"comfortable";
+  document.documentElement.dataset.radius=appearance.radius||"soft";
+  document.documentElement.dataset.layout=appearance.layout||"single";
+  if(/^#[0-9a-f]{6}$/i.test(appearance.accent||""))document.documentElement.style.setProperty("--accent",appearance.accent);
+}
+function render(){
+  applyAppearance();
+  document.title=`${activity.title} | Activity Studio`;
+  $("#eyebrow").textContent=`${activity.topic} / ${activity.mode}`;
+  $("#title").textContent=activity.title;
+  setMarkup($("#objective"),html(activity._objectiveHtml,activity.objective));
+  setMarkup($("#instructions"),html(activity._instructionsHtml,activity.instructions||"Complete the activity, then submit for feedback."));
+  $("#activityId").textContent=activity.id;
+  setMarkup($("#items"),activity.items.map(renderItem).join(""));
+  bindDynamic();updateProgress();
+}
+function shell(item,index,body){
+  const width=item.width||"full",tone=item.tone||"default";
+  if(item.type==="content")return `<section class="item content-block rich" data-item="${esc(item.id)}" data-width="${esc(width)}" data-tone="${esc(tone)}"><div class="prompt">${html(item._promptHtml,item.prompt)}</div>${html(item._contentHtml,item.content)}</section>`;
+  const grade=state.grades[item.id];
+  const feedback=grade?feedbackHtml(item,grade):"";
+  const hint=item.hint?`<div class="hint-wrap"><button type="button" class="secondary hint-btn" data-id="${esc(item.id)}">Show hint</button><div class="hint rich" id="hint_${esc(item.id)}">${html(item._hintHtml,item.hint)}</div></div>`:"";
+  const type=activity.appearance?.showItemTypes?` / ${esc(item.type)}`:"";
+  const promptHtml=item.type==="cloze"?"":`<div class="prompt rich">${html(item._promptHtml,item.prompt)}</div>`;
+  return `<section class="item" data-item="${esc(item.id)}" data-width="${esc(width)}" data-tone="${esc(tone)}"><div class="item-top"><span class="item-no">Item ${index+1}${type}</span><span class="points">${item.points||0} pt</span></div>${promptHtml}${item._displayHtml?`<div class="math rich">${item._displayHtml}</div>`:""}${body}${hint}${feedback}</section>`;
+}
+function feedbackHtml(item,grade){const pending=grade.correct===null;return `<div class="feedback ${grade.correct?"good":"bad"}"><strong>${pending?"Needs tutor review":grade.correct?"Correct":"Review this one"}${pending?"":` | ${grade.earned}/${item.points||0} points`}</strong><div class="rich">${html(item._explanationHtml,item.explanation)}</div></div>`}
+function renderItem(item,index){
+  const name=fieldName(item);let body="";
+  if(item.type==="content")return shell(item,index,"");
+  if(item.type==="choice")body=item.options.map((option,i)=>`<label class="option"><input type="radio" name="${name}" value="${esc(option)}"><span class="rich">${html(item._optionHtml?.[i],option)}</span></label>`).join("");
+  else if(item.type==="multi-select")body=item.options.map((option,i)=>`<label class="option"><input type="checkbox" name="${name}" value="${esc(option)}"><span class="rich">${html(item._optionHtml?.[i],option)}</span></label>`).join("");
+  else if(["text","expression","integral"].includes(item.type))body=`<label><span class="field-label">Your answer</span><input type="text" name="${name}" autocomplete="off" placeholder="${item.type==="integral"?"Include + C":"Type your response"}"></label>`;
+  else if(item.type==="numeric")body=`<label><span class="field-label">Your answer ${item.unit?`(${esc(item.unit)})`:""}</span><input type="number" step="any" name="${name}" inputmode="decimal"></label>`;
+  else if(item.type==="reflection")body=`<label><span class="field-label">Your response</span><textarea name="${name}" placeholder="${esc(item.placeholder||"Write your response")}"></textarea></label>`;
+  else if(item.type==="cloze"){let prompt=html(item._promptHtml,item.prompt);item.blanks.forEach((_,i)=>{prompt=prompt.replace(`[[${i+1}]]`,`<input class="cloze-input" aria-label="Blank ${i+1}" type="text" name="${name}_${i}" autocomplete="off">`)});body=`<div class="prompt rich">${prompt}</div>`}
+  else if(item.type==="match"){const rights=shuffled(item.pairs.map(pair=>pair.right));body=item.pairs.map((pair,i)=>`<div class="match-row"><span class="match-left rich">${html(item._pairHtml?.[i]?.left,pair.left)}</span><select name="${name}_${i}"><option value="">Choose</option>${rights.map(right=>`<option value="${esc(right)}">${esc(right)}</option>`).join("")}</select></div>`).join("")}
+  else if(item.type==="order"){if(!state.orders[item.id])state.orders[item.id]=shuffled(item.steps);body=orderBody(item)}
+  else if(item.type==="speaking"){const listenBtn=(item.audioPrompt||item.expectedPhrase)?`<button type="button" class="secondary speak-listen-btn" data-text="${esc(item.audioPrompt||item.expectedPhrase)}" data-lang="${esc(item.language||"es-ES")}">🔊 Listen</button>`:"";body=`<div class="speaking-box" data-item="${esc(item.id)}"><div class="speaking-controls">${listenBtn}<button type="button" class="speak-mic-btn" data-id="${esc(item.id)}" data-lang="${esc(item.language||"es-ES")}">🎤 Click to Speak</button></div><div class="speak-transcript" id="transcript_${esc(item.id)}" placeholder="Spoken words will appear here..."></div><div class="speak-fallback"><label><span class="field-label">Or type if microphone is unavailable</span><input type="text" name="${name}" id="input_${esc(item.id)}" autocomplete="off" placeholder="Type your response..."></label></div></div>`}
+  else if(["sheet","accounting-sheet"].includes(item.type)){
+    const cols=item.columns||["Date","Account Title & Explanation","Debit ($)","Credit ($)"];
+    const initialRowCount=Math.max(item.rows||3,(item.initialRows?.length||0));
+    let rowsHtml="";
+    for(let r=0;r<initialRowCount;r++){
+      const preset=item.initialRows?.[r]||{};
+      rowsHtml+=`<tr class="sheet-row" data-row="${r}">${cols.map((c,ci)=>{const val=preset[c]||preset[ci]||"";return `<td><input type="text" class="sheet-cell" data-col="${ci}" data-colname="${esc(c)}" value="${esc(val)}" autocomplete="off"></td>`}).join("")}<td><button type="button" class="secondary sheet-del-row" style="padding:2px 6px;font-size:.7rem">✕</button></td></tr>`;
+    }
+    body=`<div class="sheet-wrap" data-item="${esc(item.id)}" data-cols="${esc(JSON.stringify(cols))}"><table class="sheet-table"><thead><tr>${cols.map(c=>`<th>${esc(c)}</th>`).join("")}<th style="width:36px"></th></tr></thead><tbody id="sheet_tbody_${esc(item.id)}">${rowsHtml}</tbody><tfoot><tr style="font-weight:bold;background:var(--elevated)"><td colspan="${Math.max(1,cols.length-2)}">Totals / Equality:</td>${cols.length>2?`<td class="sheet-sum-debit" id="debit_sum_${esc(item.id)}">$0.00</td>`:""}${cols.length>2?`<td class="sheet-sum-credit" id="credit_sum_${esc(item.id)}">$0.00</td>`:""}<td></td></tr></tfoot></table><div class="sheet-actions"><button type="button" class="secondary sheet-add-row" data-id="${esc(item.id)}">＋ Add Row</button><span class="sheet-balance-badge imbalanced" id="sheet_badge_${esc(item.id)}">⚖️ Unbalanced: Debits $0.00 | Credits $0.00</span></div><input type="hidden" name="${name}" id="input_${esc(item.id)}"></div>`;
+  }
+  return shell(item,index,body);
+}
+function orderBody(item){return `<ol class="order-list">${state.orders[item.id].map((step,i)=>{const source=item.steps.indexOf(step);return `<li class="order-row"><span class="order-index">${i+1}</span><span class="order-copy rich">${html(item._stepHtml?.[source],step)}</span><span class="move"><button type="button" class="secondary order-move" aria-label="Move up" data-id="${esc(item.id)}" data-from="${i}" data-to="${i-1}" ${i===0?"disabled":""}>↑</button><button type="button" class="secondary order-move" aria-label="Move down" data-id="${esc(item.id)}" data-from="${i}" data-to="${i+1}" ${i===state.orders[item.id].length-1?"disabled":""}>↓</button></span></li>`}).join("")}</ol>`}
+function bindDynamic(){
+  document.querySelectorAll(".hint-btn").forEach(button=>button.onclick=()=>{const hint=$("#hint_"+CSS.escape(button.dataset.id));const revealing=!hint.classList.contains("visible");hint.classList.toggle("visible");if(revealing)state.hints[button.dataset.id]=(state.hints[button.dataset.id]||0)+1;button.textContent=hint.classList.contains("visible")?"Hide hint":"Show hint"});
+  document.querySelectorAll(".order-move").forEach(button=>button.onclick=()=>{const values=state.orders[button.dataset.id],from=+button.dataset.from,to=+button.dataset.to;[values[from],values[to]]=[values[to],values[from]];const item=activity.items.find(candidate=>candidate.id===button.dataset.id);document.querySelector(`[data-item="${CSS.escape(item.id)}"] .order-list`).replaceWith(...markupNodes(orderBody(item)));bindDynamic();updateProgress()});
+  document.querySelectorAll("input,textarea,select").forEach(control=>control.addEventListener("input",updateProgress));
+  document.querySelectorAll(".speak-listen-btn").forEach(btn=>btn.onclick=()=>{if(!window.speechSynthesis)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(btn.dataset.text);u.lang=btn.dataset.lang||"es-ES";u.rate=0.9;window.speechSynthesis.speak(u)});
+  document.querySelectorAll(".speak-mic-btn").forEach(btn=>btn.onclick=()=>{const id=btn.dataset.id,lang=btn.dataset.lang||"es-ES",SpeechRec=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SpeechRec){alert("Speech recognition is not supported in this browser. Please use the text input below.");return}if(btn.classList.contains("recording")){btn._rec?.stop();return}try{const rec=new SpeechRec();rec.lang=lang;rec.interimResults=true;rec.maxAlternatives=1;btn._rec=rec;btn.classList.add("recording");btn.textContent="🎙️ Listening...";const tEl=document.getElementById("transcript_"+id),inEl=document.getElementById("input_"+id);rec.onresult=(e)=>{let s="";for(let i=0;i<e.results.length;i++)s+=e.results[i][0].transcript;if(tEl)tEl.textContent=s;if(inEl){inEl.value=s;inEl.dispatchEvent(new Event("input"))}};rec.onerror=()=>{btn.classList.remove("recording");btn.textContent="🎤 Click to Speak"};rec.onend=()=>{btn.classList.remove("recording");btn.textContent="🎤 Click to Speak";updateProgress()};rec.start()}catch(e){btn.classList.remove("recording");btn.textContent="🎤 Click to Speak"}});
+  // Dynamic Sheet Binding
+  function syncSheet(itemId){
+    const wrap=document.querySelector(`.sheet-wrap[data-item="${CSS.escape(itemId)}"]`);
+    if(!wrap)return;
+    const cols=sheetColumns(wrap);
+    const rows=[...wrap.querySelectorAll(".sheet-row")];
+    let totDebit=0,totCredit=0,entries=[];
+    rows.forEach(r=>{
+      const cells=[...r.querySelectorAll(".sheet-cell")];
+      const entry={};
+      cells.forEach((c,ci)=>{
+        const colName=cols[ci]||"col_"+ci;
+        const val=c.value.trim();
+        entry[colName]=val;
+        const lower=colName.toLowerCase();
+        const num=parseFloat(val.replace(/[$,]/g,""));
+        if(!isNaN(num)){
+          if(lower.includes("debit"))totDebit+=num;
+          else if(lower.includes("credit"))totCredit+=num;
+        }
+      });
+      if(Object.values(entry).some(v=>v))entries.push(entry);
+    });
+    const dSum=document.getElementById("debit_sum_"+itemId);
+    const cSum=document.getElementById("credit_sum_"+itemId);
+    if(dSum)dSum.textContent="$"+totDebit.toFixed(2);
+    if(cSum)cSum.textContent="$"+totCredit.toFixed(2);
+    const isBalanced=Math.abs(totDebit-totCredit)<0.01 && totDebit>0;
+    const badge=document.getElementById("sheet_badge_"+itemId);
+    if(badge){
+      badge.className="sheet-balance-badge "+(isBalanced?"balanced":"imbalanced");
+      badge.textContent=isBalanced?`⚖️ Balanced: Total $ ${totDebit.toFixed(2)}`:`⚠️ Unbalanced: Debits ${totDebit.toFixed(2)} | Credits ${totCredit.toFixed(2)}`;
+    }
+    const inEl=document.getElementById("input_"+itemId);
+    if(inEl){
+      inEl.value=JSON.stringify({entries,totDebit,totCredit,isBalanced});
+      inEl.dispatchEvent(new Event("input"));
+    }
+    updateProgress();
+  }
+  document.querySelectorAll(".sheet-wrap").forEach(wrap=>{
+    const itemId=wrap.dataset.item;
+    wrap.querySelectorAll(".sheet-cell").forEach(c=>{c.oninput=()=>syncSheet(itemId)});
+    wrap.querySelectorAll(".sheet-del-row").forEach(b=>{b.onclick=()=>{b.closest("tr").remove();syncSheet(itemId)}});
+    syncSheet(itemId);
+  });
+  document.querySelectorAll(".sheet-add-row").forEach(b=>{
+    b.onclick=()=>{
+      const itemId=b.dataset.id;
+      const wrap=document.querySelector(`.sheet-wrap[data-item="${CSS.escape(itemId)}"]`);
+      const cols=sheetColumns(wrap);
+      const tbody=document.getElementById("sheet_tbody_"+itemId);
+      const rowCount=tbody.querySelectorAll("tr").length;
+      const tr=document.createElement("tr");
+      tr.className="sheet-row";
+      tr.dataset.row=rowCount;
+      setMarkup(tr,cols.map((c,ci)=>`<td><input type="text" class="sheet-cell" data-col="${ci}" data-colname="${esc(c)}" autocomplete="off"></td>`).join("")+`<td><button type="button" class="secondary sheet-del-row" style="padding:2px 6px;font-size:.7rem">✕</button></td>`);
+      tbody.appendChild(tr);
+      tr.querySelectorAll(".sheet-cell").forEach(c=>{c.oninput=()=>syncSheet(itemId)});
+      tr.querySelector(".sheet-del-row").onclick=()=>{tr.remove();syncSheet(itemId)};
+      syncSheet(itemId);
+    };
+  });
+}
+function rawValue(item){
+  const name=fieldName(item);
+  if(item.type==="choice")return document.querySelector(`input[name="${CSS.escape(name)}"]:checked`)?.value||"";
+  if(item.type==="multi-select")return [...document.querySelectorAll(`input[name="${CSS.escape(name)}"]:checked`)].map(input=>input.value);
+  if(item.type==="cloze")return item.blanks.map((_,i)=>document.querySelector(`[name="${CSS.escape(name+"_"+i)}"]`)?.value||"");
+  if(item.type==="match")return item.pairs.map((_,i)=>document.querySelector(`[name="${CSS.escape(name+"_"+i)}"]`)?.value||"");
+  if(item.type==="order")return [...state.orders[item.id]];
+  return document.querySelector(`[name="${CSS.escape(name)}"]`)?.value||"";
+}
+function answered(item){const value=rawValue(item);return Array.isArray(value)?value.some(entry=>String(entry).trim()):String(value).trim().length>0}
+function normalizeExpression(value){return String(value||"").toLocaleLowerCase().replace(/[−–]/g,"-").replace(/×/g,"*").replace(/÷/g,"/").replace(/²/g,"^2").replace(/³/g,"^3").replace(/\s+/g,"").replace(/\+c$/i,"")}
+function symbolicMatch(answer,item){return [item.answer,...(item.acceptedAnswers||[])].some(value=>normalizeExpression(value)===normalizeExpression(answer))}
+function gradeItem(item){const response=rawValue(item);let fraction=0;
+  if(item.type==="choice")fraction=norm(response)===norm(item.answer)?1:0;
+  else if(item.type==="multi-select")fraction=sameSet(response.map(value=>norm(value)).sort(),item.answers.map(value=>norm(value)).sort())?1:0;
+  else if(item.type==="text"){const value=norm(response,item.caseSensitive);fraction=item.containsAll?.length?item.containsAll.every(keyword=>value.includes(norm(keyword,item.caseSensitive)))?1:0:(item.acceptedAnswers||[]).some(answer=>value===norm(answer,item.caseSensitive))?1:0}
+  else if(item.type==="numeric"){const value=Number(response),tolerance=item.tolerance??.001;fraction=Number.isFinite(value)&&Math.abs(value-item.answer)<=tolerance?1:0}
+  else if(item.type==="expression"||item.type==="integral")fraction=symbolicMatch(response,item)?1:0;
+  else if(item.type==="cloze")fraction=item.blanks.filter((blank,i)=>(blank.answers||[]).some(answer=>norm(response[i],blank.caseSensitive)===norm(answer,blank.caseSensitive))).length/item.blanks.length;
+  else if(item.type==="match")fraction=item.pairs.filter((pair,i)=>norm(response[i])===norm(pair.right)).length/item.pairs.length;
+  else if(item.type==="order")fraction=response.filter((step,i)=>step===item.steps[i]).length/item.steps.length;
+  else if(item.type==="reflection")return {correct:null,earned:0,response};
+  const points=item.points||0;return {correct:fraction===1,earned:Math.round(points*fraction*100)/100,response};
+}
+function responseItems(){return activity.items.filter(item=>item.type!=="content")}
+function updateProgress(){const items=responseItems(),count=items.filter(answered).length,percent=items.length?Math.round(count/items.length*100):100;$("#progressLabel").textContent=`${count} of ${items.length} answered`;$("#progressValue").textContent=percent+"%";$("#progressFill").style.width=percent+"%"}
+async function submitActivity(event){
+  event.preventDefault();
+  const items=responseItems();
+  const missing=items.filter(item=>item.required!==false&&item.type!=="reflection"&&!answered(item));
+  if(missing.length){document.querySelector(`[data-item="${CSS.escape(missing[0].id)}"]`).scrollIntoView({behavior:"smooth",block:"center"});$("#saveStatus").textContent="Complete required items before grading.";return}
+  let localEarned=0,localTotal=0;
+  const results=items.map(item=>{const grade=gradeItem(item);state.grades[item.id]=grade;if(item.type!=="reflection"){localEarned+=grade.earned;localTotal+=item.points||0}return {id:item.id,type:item.type,skill:item.skill,correct:grade.correct,earned:grade.earned,points:item.points||0,response:grade.response,hintsRequested:state.hints[item.id]||0}});
+  state.submitted=true;
+  const payload={version:1,activityId:activity.id,title:activity.title,topic:activity.topic,objective:activity.objective,mode:activity.mode,score:localTotal?Math.round(localEarned/localTotal*100):0,passed:false,earned:localEarned,total:localTotal,startedAt:activityStartedAt,completedAt:new Date().toISOString(),contentHash:activity.contentHash,items:results};
+  let verified=null;
+  try{
+    const response=await fetch(apiBase+"/api/activity-result",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    if(!response.ok){const details=await response.json().catch(()=>({}));throw new Error(details.error||`HTTP ${response.status}`)}
+    verified=await response.json();
+  }catch(error){$("#saveStatus").textContent=`Server verification unavailable (${error.message}); local estimate only. No evidence was saved.`}
+  if(verified){for(const grade of verified.items){state.grades[grade.id]={...state.grades[grade.id],...grade}}$("#saveStatus").textContent="Verified results saved. Return to Pi for gap review."}
+  const earned=verified?verified.earned:localEarned,total=verified?verified.total:localTotal;
+  const score=verified?verified.verifiedScore:payload.score,passed=verified?verified.passed:false;
+  const pending=verified?verified.items.filter(item=>item.correct===null).length:0;
+  $("#scoreTop").textContent=verified?(total?score+"%":"Needs review"):"Local estimate";
+  for(const item of items){if(item.type==="reflection")continue;const section=document.querySelector(`[data-item="${CSS.escape(item.id)}"]`);section.querySelector(".feedback")?.remove();section.append(...markupNodes(feedbackHtml(item,state.grades[item.id])))}
+  const summary=$("#summary");summary.className="summary visible "+(passed?"pass":"");setMarkup(summary,`<h2>${verified?(passed?"Target reached":"Evidence collected"):"Unverified local estimate"}</h2><p><strong>${score}%</strong> | ${earned} of ${total} automatically verified points${pending?` | ${pending} item(s) need tutor review`:""}</p><p>Return to your tutor for explanation, gap repair, and an independent changed-case check.</p>`);summary.scrollIntoView({behavior:"smooth",block:"center"});
+}
+$("#activityForm").addEventListener("submit",submitActivity);
+$("#clearBtn").onclick=()=>{if(!confirm("Clear every response in this activity?"))return;state.orders={};state.grades={};state.submitted=false;$("#scoreTop").textContent="Not graded";$("#summary").className="summary";render()};
+render();
+</script>
+</body>
+</html>
