@@ -1,6 +1,6 @@
 # Sato
 
-Sato is a learning engine built as a fork of [pi-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), utilizing mainstream learning research.
+Sato is a learning engine built on top of [pi-agent](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent), utilizing mainstream learning research.
 
 > **Note:** This is my personal implementation. The current setup may not work best for everyone, so use your own judgment and discretion when adapting it.
 
