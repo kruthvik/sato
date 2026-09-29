@@ -38,10 +38,12 @@ Thumbs.db
 /_learning/palaces/
 /_learning/web/
 /_learning/security/
-_learning/mastery/*.json
-_learning/reviews/cards.json
-_learning/reviews/due-today.md
-_learning/graphs/*.json
+/_learning/mastery/*
+!/_learning/mastery/.gitkeep
+/_learning/reviews/*
+!/_learning/reviews/.gitkeep
+/_learning/graphs/*
+!/_learning/graphs/.gitkeep
 *.log
 
 # Learner-authored/generated library content; keep only the empty directory markers.
