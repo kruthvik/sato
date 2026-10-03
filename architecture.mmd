@@ -1,0 +1,46 @@
+flowchart TB
+  U["One learner: /learn or /exam; stop/continue"] --> L["Bun launcher: isolated Pi home"]
+  L --> P
+  L --> B
+  subgraph P["Pi: conversation and agent loop"]
+    T["Tutor: simple opening, short teaching, attempts, feedback"]
+    R["Author/scorer roles"]
+    DPL["Pi planning child: infer subject, small outline; intake and consequential replans"]
+    M["Pi model/provider calls + retry instrumentation"]
+    X["Trusted extension: four educational tools"]
+    T --> R
+    T -->|"Bounded facts; one tool-free request"| DPL
+    DPL -->|"Validated proposal; same Goal/Component/Plan ledger"| T
+    T --> M
+    R --> M
+    DPL --> M
+    T <--> X
+    R <--> X
+  end
+  subgraph B["Bun: educational state; no model or agent loop"]
+    A["Typed API: validate, transact, read context"]
+    E[("Immutable revisions + events / evidence")]
+    C[("Separate immutable model-call log")]
+    V[("Deterministic as-of projections; rebuildable")]
+    Q["Context compiler: bounded stored facts"]
+    S["Source parsing / spans + small local jobs"]
+    F[("Original source and response blobs")]
+    A --> E
+    A --> C
+    E --> V
+    E --> Q
+    V --> Q
+    Q --> A
+    S --> Q
+    S --> E
+    S --> F
+    A <--> S
+  end
+  X <-->|"Authenticated local IPC"| A
+  M -->|"Call telemetry, not learner evidence"| A
+  U -->|"brain.md, sources, authored work"| X
+  X -->|"Bounded relevant state and sources"| T
+  T -->|"Checkpoint and user-controlled next move"| U
+  D["Optional future voice / drawing / graph adapters"] --> X
+  E --> K["Consistent backup/export + replay and learning checks"]
+  F --> K

@@ -1,0 +1,66 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches and local Sato runtime data
+.eslintcache
+.cache
+*.tsbuildinfo
+.learn/
+**/auth.json
+**/sessions/
+**/*.db
+**/*.sqlite
+**/*.sqlite3
+**/*.sqlite-wal
+**/*.sqlite-shm
+**/*.db-wal
+**/*.db-shm
+**/brain.md
+**/tutor.lock
+**/models-store.json
+**/settings.json
+**/keybindings.json
+**/session*.jsonl
+.pi/
+.feynman/
+.codex/
+.obsidian/
+_learning/
+notes/
+papers/
+outputs/.plans/
+outputs/.drafts/
+outputs/start.md
+docs/plans/
+data/
+backups/
+exports/
+*.backup.json
+*.private-records.json
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
