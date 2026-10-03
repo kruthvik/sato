@@ -2,8 +2,6 @@
 
 A local-first personal learning engine built on Bun and Pi's native terminal. Sato adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. Independent performance, assisted work, delayed retention and application stay separate.
 
-The implementation follows [outputs/main.md](outputs/main.md), the corrected [learning-science synthesis](outputs/learning-science-final.md) and related research. `outputs/start.md` was excluded. The research motivates bounded techniques; it does not establish that this combined engine is universally optimal.
-
 ## Start
 
 Tested on Windows with **Bun 1.4.2** and **Pi 1.0.0**. Pi remains a normal runtime dependency (`^1.0.0`), with a reproducible lockfile and optional independently updatable runtime in Sato's home.
