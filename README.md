@@ -1,6 +1,6 @@
-# Sato
+# sato
 
-A local-first personal learning engine built on Bun and Pi's native terminal. Sato adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. Independent performance, assisted work, delayed retention and application stay separate.
+personal learning engine built on bun and pi's native terminal. adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. uses extensive learning research from feynman with citations in ./outputs.
 
 ## Start
 
@@ -24,9 +24,7 @@ Inside the native Pi terminal:
 /quit                      Exit
 ```
 
-Start with what you want to learn, then one optional note about time, a deadline or preferences. No subject picker or planning questionnaire. A Pi planning subagent infers the subject and prepares a small, provisional starting outline; the tutor begins teaching from it. You can correct the plan at any time. An opening check is optional, not a gate; skipping it leaves knowledge unknown. `/exam` also covers essays, interviews, speeches and practical tasks. The learner decides when to stop.
-
-Live tutoring requires a Pi-compatible provider. After intake consent, conversation, relevant learning records, up to 6,000 characters of `brain.md`, and selected source excerpts may go to that provider. Educational records and originals stay local. Pi install telemetry defaults to disabled in Sato settings; native Pi catalog/version/package checks can still contact Pi services. Explicit telemetry settings/environment flags retain Pi behavior.
+live tutoring requires a pi-compatible provider. after intake consent, conversation, relevant learning records, up to 6,000 characters of `brain.md`, and selected source excerpts may go to that provider. educational records and originals stay local. pi install telemetry defaults to disabled in sato settings; native pi catalog/version/package checks can still contact Pi services. explicit telemetry settings/environment flags retain pi behavior.
 
 For a working lesson without credentials or model requests:
 
@@ -35,7 +33,7 @@ bun run dev demo
 bun run dev demo --answers 5,7,9
 ```
 
-The offline math demo teaches an example, delivers fresh tasks, offers hints and stop, scores numeric answers and reports a checkpoint. Its temporary records are separate from personal history. It tests numbers, not reasoning or retention. `bun link` optionally exposes `learn` during development; this repository is not a published install command.
+the offline math demo teaches an example, delivers fresh tasks, offers hints and stop, scores numeric answers and reports a checkpoint. its temporary records are separate from personal history.  `bun link` optionally exposes `learn` during development; this repository is not a published install command.
 
 ## Records and personalization
 
