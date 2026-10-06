@@ -2,16 +2,6 @@
 
 Personal learning engine built on bun and pi's native terminal. It adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. uses extensive learning research from Feynman with citations in ./outputs.
 
-## Notes and Request For Feedback
-
-The backend and agent-cycle was personally designed, although I used an AI to improve the prompt I had built to create the core interface. The software choices were largely a result of my trail-and-error with a previous iteration of this project. A significant portion was AI-generated, and despite the fact that I was able to vet some of it, there may still be core issues due to the nature of AI-written code. If you look through the `/outputs` and `/docs` folder you should see a significant portion of the prompting and planning, although my original diagrams and whatnot aren't currently there.
-
-What I primary vetted was the CLI, how it connects to pi-agent and ignores the global instance, and the `core` folder. I had to go through multiple revisions and prompts to fix personal issues I had with the agent loop structure.
-
-The primary feedback that I would appreciate is feedback related to the core learning functionality and the agent loop. I'd love to hear from users who have more experience in learning research than me, who can possibly shine light on how this current approach falls short and if it currently has too much all at once. I also want to know more about the general agent loop. I added MCQ, open-ended questions, Feynman inversion, and active recall, as well as native learning-research techniques. All of these techniques were personally found to work, but I understand that they may not work for everyone. Thus, I would appreciate if users could write complaints they have with the current agent setup and how the `brain.md` file is processed.
-
-Those who want to contribute to this project are encouraged in doing so, and can contact me through my github profile. 
-
 ## Start
 
 Tested on Windows with **Bun 1.4.2** and **Pi 1.0.0**. Doesn't alter the global pi instance and stores information about the custom injection in a .lock file.
@@ -44,6 +34,8 @@ bun run dev demo --answers 5,7,9
 ```
 
 The offline math demo teaches an example, delivers fresh tasks, offers hints and stop, scores numeric answers and reports a checkpoint. Its temporary records are separate from personal history.  `bun link` optionally exposes `learn` during development; this repository is not a published install command.
+
+Run bun link to directly use the `learn` keyword instead of having to use bun run dev everytime.
 
 ## Records and personalization
 
@@ -143,6 +135,17 @@ bun run lint
 bun test
 bun run smoke
 ```
+
+## Notes and Request For Feedback
+
+The backend and agent-cycle was personally designed, although I used an AI to improve the prompt I had built to create the core interface. The software choices were largely a result of my trail-and-error with a previous iteration of this project. A significant portion was AI-generated, and despite the fact that I was able to vet some of it, there may still be core issues due to the nature of AI-written code. If you look through the `/outputs` and `/docs` folder you should see a significant portion of the prompting and planning, although my original diagrams and whatnot aren't currently there.
+
+What I primary vetted was the CLI, how it connects to pi-agent and ignores the global instance, and the `core` folder. I had to go through multiple revisions and prompts to fix personal issues I had with the agent loop structure.
+
+The primary feedback that I would appreciate is feedback related to the core learning functionality and the agent loop. I'd love to hear from users who have more experience in learning research than me, who can possibly shine light on how this current approach falls short and if it currently has too much all at once. I also want to know more about the general agent loop. I added MCQ, open-ended questions, Feynman inversion, and active recall, as well as native learning-research techniques. All of these techniques were personally found to work, but I understand that they may not work for everyone. Thus, I would appreciate if users could write complaints they have with the current agent setup and how the `brain.md` file is processed.
+
+Those who want to contribute to this project are encouraged in doing so, and can contact me through my github profile. 
+
 ## Future
 
 This is actually a redesign of a personal system I had used. This is basically a trail run of the core features, and once I aggregate enough feedback, I will implement an accelerated learning option as well as a drill based on a studying method I came across where people only use past exams and questions instead of learning from scratch. These will likely be in the form of /drill and /accelerate.
