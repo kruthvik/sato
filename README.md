@@ -148,7 +148,7 @@ Those who want to contribute to this project are encouraged in doing so, and can
 
 ## Future
 
-This is actually a redesign of a personal system I had used. This is basically a trail run of the core features, and once I aggregate enough feedback, I will implement an accelerated learning option as well as a drill based on a studying method I came across where people only use past exams and questions instead of learning from scratch. These will likely be in the form of /drill and /accelerate.
+This is actually a redesign of a personal system I had used. This is basically a demo run of the core features, and once I aggregate enough feedback, I will implement an accelerated learning option as well as a drill option (this is basically based on a studying method I came across where people only use past exams and questions instead of learning from scratch). These will likely naturally be in the form of `/drill` and `/accelerate`.
 
 Beyond that, I also intend to add further integrations. Excalidraw, for one, could greatly benefit the current system. An activity studio would also be nice in which AIs could design custom interfaces using markdown, or at a more grand scale, possibly delegate tasks and what needs to be done to a subagent that builds it using bun or something similar. This would carry a lot of overhead and compute, so optimizing this before fully capitalizing off of it as a feature is vital. 
 
