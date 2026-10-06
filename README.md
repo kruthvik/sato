@@ -7,9 +7,13 @@ Personal learning engine built on bun and pi's native terminal. It adapts instru
 Tested on Windows with **Bun 1.4.2** and **Pi 1.0.0**. Doesn't alter the global pi instance and stores information about the custom injection in a .lock file.
 
 ```sh
+git clone https://github.com/kruthvik/sato
+cd sato
+
 bun install --frozen-lockfile
 bun run dev init
 bun run dev
+bun link # optional if you want to use the learn cmd instead of bun run dev
 ```
 
 Inside the native Pi terminal:
