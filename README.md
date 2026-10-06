@@ -111,7 +111,6 @@ learn theme list
 learn theme set dark
 ```
 
-Replace the example package/path with a real extension you have reviewed. The primary commands follow Pi's install/remove/list/update workflow, with readable output and one scope: Sato's home. `learn uninstall` is an alias for remove. Use `--json` on these customization commands for scripting. `learn --help` shows the short everyday interface; `learn help --all` includes the existing plugin/resource commands and recovery options. `/login`, `/model`, `/settings` and `/reload` remain Pi's native terminal controls.
 
 Pi packages retain native npm/git/local sources, manifests and resource filters. Versioned npm packages stay pinned; use an unversioned source for tracking updates, or add the new version explicitly. Package removal uses native Pi semantics: managed package files are removed; local source files are retained. Individual extensions, skills, prompts and themes can be added, removed from configuration, enabled or disabled. `/settings` and `/reload` remain native Pi controls. See [Pi customization and updates](docs/PI.md) for examples and safety boundaries.
 
@@ -134,9 +133,10 @@ bun run lint
 bun test
 bun run smoke
 ```
+## Future
 
-Tests cover actual Pi SDK startup/isolation, extension execution and native package removal, standalone/packaged resource switches, theme persistence, runtime update/rollback/reset, failure recovery, response authenticity, duplicates/stale revisions, exact rubric references, assistance timing, late corrections, deterministic replay, delays, source quarantine/injection handling, authenticated IPC, CLI maintenance and WAL backup/restore. Provider-hook fixtures explicitly mark unobservable stream/retry/compaction completion as unknown. Live provider behavior and instructional quality require credentialed checks.
+This is actually a redesign of a personal system I had used. This is basically a trail run of the core features, and once I aggregate enough feedback, I will implement an accelerated learning option as well as a drill based on a studying method I came across where people only use past exams and questions instead of learning from scratch. These will likely be in the form of /drill and /accelerate.
 
-Before publishing a staged change, run `bun run check:publication`. It checks staged files for private runtime paths, user-home paths and common credential patterns without printing their contents. Session transcripts, learning databases, learner preferences, credentials, local settings and interim agent plans/drafts are excluded by `.gitignore`. This is a guardrail, not a guarantee that arbitrary text contains no secrets; review anything personal before adding it to Git.
+Beyond that, I also intend to add further integrations. Excalidraw, for one, could greatly benefit the current system. An activity studio would also be nice in which AIs could design custom interfaces using markdown, or at a more grand scale, possibly delegate tasks and what needs to be done to a subagent that builds it using bun or something similar. This would carry a lot of overhead and compute, so optimizing this before fully capitalizing off of it as a feature is vital. 
 
-PDF/OCR, audio, executable simulations, protected-bank administration, automatic large practice banks, learned scheduling, irreversible privacy purge, `/accelerate` and standalone `/drill` remain deferred. See [architecture](docs/ARCHITECTURE.md) and [implementation record](docs/IMPLEMENTATION.md).
+I would love to hear any other possible features that people would like.
