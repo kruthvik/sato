@@ -1,10 +1,20 @@
-# sato
+# Sato
 
-personal learning engine built on bun and pi's native terminal. adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. uses extensive learning research from feynman with citations in ./outputs.
+Personal learning engine built on bun and pi's native terminal. It adapts instruction to the learner's goal, actual task evidence, prior help and uncertainty. uses extensive learning research from Feynman with citations in ./outputs.
+
+## Notes and Request For Feedback
+
+The backend and agent-cycle was personally designed, although I used an AI to improve the prompt I had built to create the core interface. The software choices were largely a result of my trail-and-error with a previous iteration of this project. A significant portion was AI-generated, and despite the fact that I was able to vet some of it, there may still be core issues due to the nature of AI-written code. If you look through the `/outputs` and `/docs` folder you should see a significant portion of the prompting and planning, although my original diagrams and whatnot aren't currently there.
+
+What I primary vetted was the CLI, how it connects to pi-agent and ignores the global instance, and the `core` folder. I had to go through multiple revisions and prompts to fix personal issues I had with the agent loop structure.
+
+The primary feedback that I would appreciate is feedback related to the core learning functionality and the agent loop. I'd love to hear from users who have more experience in learning research than me, who can possibly shine light on how this current approach falls short and if it currently has too much all at once. I also want to know more about the general agent loop. I added MCQ, open-ended questions, Feynman inversion, and active recall, as well as native learning-research techniques. All of these techniques were personally found to work, but I understand that they may not work for everyone. Thus, I would appreciate if users could write complaints they have with the current agent setup and how the `brain.md` file is processed.
+
+Those who want to contribute to this project are encouraged in doing so, and can contact me through my github profile. 
 
 ## Start
 
-Tested on Windows with **Bun 1.4.2** and **Pi 1.0.0**. Pi remains a normal runtime dependency (`^1.0.0`), with a reproducible lockfile and optional independently updatable runtime in Sato's home.
+Tested on Windows with **Bun 1.4.2** and **Pi 1.0.0**. Doesn't alter the global pi instance and stores information about the custom injection in a .lock file.
 
 ```sh
 bun install --frozen-lockfile
@@ -24,7 +34,7 @@ Inside the native Pi terminal:
 /quit                      Exit
 ```
 
-live tutoring requires a pi-compatible provider. after intake consent, conversation, relevant learning records, up to 6,000 characters of `brain.md`, and selected source excerpts may go to that provider. educational records and originals stay local. pi install telemetry defaults to disabled in sato settings; native pi catalog/version/package checks can still contact Pi services. explicit telemetry settings/environment flags retain pi behavior.
+Live tutoring requires a pi-compatible provider. after intake consent, conversation, relevant learning records, up to 6,000 characters of `brain.md`, and selected source excerpts may go to that provider. Educational records and originals stay local. Pi install telemetry defaults to disabled in sato settings; native pi catalog/version/package checks can still contact Pi services. explicit telemetry settings/environment flags retain pi behavior.
 
 For a working lesson without credentials or model requests:
 
@@ -33,7 +43,7 @@ bun run dev demo
 bun run dev demo --answers 5,7,9
 ```
 
-the offline math demo teaches an example, delivers fresh tasks, offers hints and stop, scores numeric answers and reports a checkpoint. its temporary records are separate from personal history.  `bun link` optionally exposes `learn` during development; this repository is not a published install command.
+The offline math demo teaches an example, delivers fresh tasks, offers hints and stop, scores numeric answers and reports a checkpoint. Its temporary records are separate from personal history.  `bun link` optionally exposes `learn` during development; this repository is not a published install command.
 
 ## Records and personalization
 
